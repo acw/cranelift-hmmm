@@ -1,7 +1,7 @@
 use cranelift_codegen::entity::EntityRef;
 use cranelift_codegen::ir::{types, AbiParam, Function, InstBuilder, Signature, UserFuncName};
 use cranelift_codegen::isa::CallConv;
-use cranelift_codegen::{isa, settings, Context};
+use cranelift_codegen::{isa, settings, settings::Configurable, Context};
 use cranelift_frontend::{FunctionBuilder, FunctionBuilderContext, Variable};
 use cranelift_module::{default_libcall_names, DataContext, Linkage, Module};
 use cranelift_object::{ObjectBuilder, ObjectModule};
@@ -9,7 +9,11 @@ use target_lexicon::Triple;
 
 fn main() -> Result<(), anyhow::Error> {
     let host = Triple::host();
-    let isa = isa::lookup(host.clone())?.finish(settings::Flags::new(settings::builder()))?;
+    let isa_builder = isa::lookup(host.clone())?;
+    let mut settings_builder = settings::builder();
+    settings_builder.set("is_pic", "true")?;
+    let isa_flags = settings::Flags::new(settings_builder);
+    let isa = isa_builder.finish(isa_flags)?;
     let object_builder = ObjectBuilder::new(isa, "example", default_libcall_names())?;
     let mut object_module = ObjectModule::new(object_builder);
 
