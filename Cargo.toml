@@ -1,0 +1,15 @@
+[package]
+name = "macos-example"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+anyhow = "^1.0.68"
+cranelift-codegen = "^0.89.2"
+cranelift-frontend = "^0.89.2"
+cranelift-module = "^0.89.2"
+cranelift-native = "^0.89.2"
+cranelift-object = "^0.89.2"
+target-lexicon = "^0.12.5"
